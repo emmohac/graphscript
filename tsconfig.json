@@ -16,7 +16,7 @@
     "target": "es2017",
     "outDir": "lib"
   },
-  "include": ["./**/*.ts"],
+  "include": ["./**/*.ts", "serverless.txt"],
   "exclude": [
     "node_modules/**/*",
     ".serverless/**/*",
