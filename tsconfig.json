@@ -22,6 +22,7 @@
     ".serverless/**/*",
     ".webpack/**/*",
     "_warmup/**/*",
-    ".vscode/**/*"
+    ".vscode/**/*",
+    "__tests__/**/*"
   ]
 }
