@@ -1,5 +1,5 @@
 import {  ApolloServer, gql } from 'apollo-server-lambda';
-import 'source-map-support/register';
+// import 'source-map-support/register';
 
 
 const typeDefs = gql`
