@@ -1,9 +1,13 @@
-service: apollo-lambda
+service: graphscript-lambda
 provider:
   name: aws
   runtime: nodejs12.x
   profile: huy
   stage: dev
+
+plugins:
+  - serverless-plugin-typescript
+
 functions:
   graphql:
     # this is formatted as <FILENAME>.<HANDLER>

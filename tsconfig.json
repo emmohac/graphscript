@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
-    "lib": ["es2017"],
+    "allowSyntheticDefaultImports": true,
+    "lib": ["esnext"],
     "removeComments": true,
+    "module": "commonjs",
     "moduleResolution": "node",
     "noUnusedLocals": true,
     "strict": true,
@@ -13,10 +15,10 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "sourceMap": true,
-    "target": "es2017",
+    "target": "esnext",
     "outDir": "lib"
   },
-  "include": ["./**/*.ts", "serverless.txt"],
+  "include": ["./**/*.ts"],
   "exclude": [
     "node_modules/**/*",
     ".serverless/**/*",

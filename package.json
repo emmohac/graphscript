@@ -2,7 +2,7 @@
   "name": "ts",
   "version": "1.0.0",
   "description": "Serverless webpack example using Typescript",
-  "main": "handler.js",
+  "main": "handler.ts",
   "scripts": {
     "test": "jest --notify --config=jest.config.js"
   },
@@ -20,6 +20,8 @@
     "jest": "^26.6.3",
     "nodemon": "^2.0.7",
     "serverless": "^2.20.1",
+    "serverless-dotenv-plugin": "^3.1.0",
+    "serverless-plugin-typescript": "^1.1.9",
     "serverless-webpack": "^5.2.0",
     "ts-jest": "^26.4.4",
     "ts-loader": "^5.3.3",
