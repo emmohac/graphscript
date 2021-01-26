@@ -1,50 +1,26 @@
 import { GraphQLResolveInfo } from 'graphql';
 import { schemaComposer } from 'graphql-compose';
-import { MenteeTC, MentorTC } from './TypeDefs';
 
-const mentee = {
-    id: "123",
-    firstName: "Huy Minh",
-    lastName: "Tran"
-};
+import { userExtra } from '../src/Data/';
 
-const mentor = {
-    id: "456",
-    firstName: "Daniel",
-    lastName: "Morningstar"
-};
+import { UserExtraTC } from '../src/Resolvers';
 
-MentorTC.addFields({
-    mentees: {
-        type: [MenteeTC],
-        resolve: async (_source: any, _args, _context, _info: GraphQLResolveInfo) => {
-            return [mentee];
-        }
-    }
-});
-
-MenteeTC.addFields({
-    mentor: {
-        type: MentorTC,
-        resolve: async (_source: any, _args, _context, _info: GraphQLResolveInfo) => {
-            return mentor;
-        }
-    }
+UserExtraTC.addFields({
+    interest: UserExtraTC.getResolver('interest'),
+    projects: UserExtraTC.getResolver('projects'),
+    applications: UserExtraTC.getResolver('applications'),
 });
 
 schemaComposer.Query.addFields({
-    Mentee: {
-        type: [MenteeTC],
-        resolve: async (_source: any, _args, _context, _info: GraphQLResolveInfo) => {
-            return [mentee];            
+    UserExtra: {
+        type: UserExtraTC,
+        args: {
+            id: 'String'
+        },
+        resolve: async (_source: any, _args: any, _context: any, _info: GraphQLResolveInfo) => {
+            return userExtra;
         }
     },
-    Mentor: {
-        type: MentorTC,
-        resolve: async (_source: any, _args, _context, _info: GraphQLResolveInfo) => {
-            return mentor;            
-        }
-    }
 });
 
 export const schema = schemaComposer.buildSchema();

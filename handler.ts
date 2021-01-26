@@ -1,19 +1,10 @@
-import {  ApolloServer, gql } from 'apollo-server-lambda';
-// import 'source-map-support/register';
+import {  ApolloServer } from 'apollo-server-lambda';
+import { Context, APIGatewayProxyEvent, Callback } from 'aws-lambda';
 
+import { schema } from './src/main';
 
-const typeDefs = gql`
-  type Query {
-    hello: String
-  }
-`;
+const server = new ApolloServer({ schema });
 
-const resolvers = {
-  Query: {
-    hello: () => 'Hello world!',
-  },
-};
-
-const server = new ApolloServer({ typeDefs, resolvers });
-
-export const graphqlHandler = server.createHandler();
+export const graphqlHandler = (event: APIGatewayProxyEvent, context: Context, callback: Callback) => {
+  return server.createHandler()(event, context, callback);
+}
