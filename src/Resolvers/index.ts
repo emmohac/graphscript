@@ -12,9 +12,9 @@ UserExtraTC.addResolver({
 UserExtraTC.addResolver({
     name: 'interest',
     type: InterestTC,
-    resolve: async (params: any) => {
-        console.log('params from interest');
-        console.log(params);
+    resolve: async (_params: any) => {
+        // console.log('params from interest');
+        // console.log(params);
         return {
             programmingLanguage: 'C++;JavaScript;TypeScript;Python;Java',
             technologies: 'Serverless;Unix;Agile/Scrum;Git;GraphQL;REST',
