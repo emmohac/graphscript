@@ -6,11 +6,17 @@ provider:
   stage: dev
 
 plugins:
-  - serverless-plugin-typescript
+  - serverless-webpack
+  # - serverless-plugin-typescript
+  - serverless-offline
+custom:
+  webpack:
+    webpackConfig: 'webpack.config.js'
+    includeModules: true
+    packager: 'yarn'
 
 functions:
   graphql:
-    # this is formatted as <FILENAME>.<HANDLER>
     handler: handler.graphqlHandler
     events:
     - http:
