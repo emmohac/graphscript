@@ -1,7 +1,7 @@
-describe('test', () => {
-  test('test it', () => {
+describe("test", () => {
+  test("test it", () => {
     // Setup
-    let a: number = 1;
+    let a = 1;
 
     // Execute
     a++;
