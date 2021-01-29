@@ -3,7 +3,7 @@ import { schemaComposer } from "graphql-compose";
 
 import { userExtra } from "../src/Data/";
 
-import { UserExtraTC } from "../src/Resolvers";
+import { UserExtraTC, UserResponseTC } from "../src/Resolvers";
 
 UserExtraTC.addFields({
   interest: UserExtraTC.getResolver("interest"),
@@ -12,6 +12,8 @@ UserExtraTC.addFields({
 });
 
 schemaComposer.Query.addFields({
+  UserRegister: UserResponseTC.getResolver("register"),
+  UserLogin: UserResponseTC.getResolver("login"),
   UserExtra: {
     type: UserExtraTC,
     args: {
