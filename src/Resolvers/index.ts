@@ -2,9 +2,13 @@ import {
   ApplicationTC,
   InterestTC,
   ProjectTC,
-  UserExtraTC
+  UserExtraTC,
+  UserInputTC,
+  UserResponseTC,
+  ErrorTC
 } from "../TypeComposes";
 import { projects, applications } from "../Data";
+import { ResolverResolveParams } from "graphql-compose";
 
 UserExtraTC.addResolver({
   name: "applications",
@@ -37,4 +41,35 @@ UserExtraTC.addResolver({
   }
 });
 
-export { UserExtraTC };
+UserResponseTC.addResolver({
+  name: "register",
+  args: {
+    input: UserInputTC
+  },
+  type: UserResponseTC,
+  resolve: async (rp: ResolverResolveParams<any, object, any>) => {
+    return {
+      isRegistered: true,
+      errors: []
+    }
+  }
+});
+
+UserResponseTC.addResolver({
+  name: "login",
+  args: {
+    input: UserInputTC
+  },
+  type: UserResponseTC,
+  resolve: async (rp: ResolverResolveParams<any, object, any>) => {
+    return {
+      isAuthenticated: false,
+      errors: [{
+        code: "non-existed",
+        message: "User not exists"
+      }]
+    };
+  }
+});
+
+export { UserExtraTC, UserResponseTC };

@@ -38,3 +38,30 @@ export const UserExtraTC = schemaComposer.createObjectTC({
     graduation: "String"
   }
 });
+
+export const ErrorTC = schemaComposer.createObjectTC({
+  name: "Error",
+  fields: {
+    code: "String",
+    message: "String"
+  }
+});
+
+export const UserResponseTC = schemaComposer.createObjectTC({
+  name: "UserResponse",
+  fields: {
+    isRegistered: "Boolean",
+    isAuthenticated: "Boolean",
+    errors: {
+      type: () => [ErrorTC]
+    }
+  }
+});
+
+export const UserInputTC = schemaComposer.createInputTC({
+  name: "UserInput",
+  fields: {
+    username: "String!",
+    password: "String!"
+  }
+});
