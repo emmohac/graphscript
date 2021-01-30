@@ -47,7 +47,7 @@ jobs:
             ${{ runner.os }}-yarn-
       - run: yarn
       - run: yarn test
-      - run: echo env
+      - run: echo "$(secrets)"
       - run: echo "$(env)"
         env:
           CI: true
