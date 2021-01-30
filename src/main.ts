@@ -12,7 +12,6 @@ UserExtraTC.addFields({
 });
 
 schemaComposer.Query.addFields({
-  UserRegister: UserResponseTC.getResolver("register"),
   UserLogin: UserResponseTC.getResolver("login"),
   UserExtra: {
     type: UserExtraTC,
@@ -37,6 +36,10 @@ schemaComposer.Query.addFields({
         return `Did you just say ${args.content}`;
       }
   }
+});
+
+schemaComposer.Mutation.addFields({
+  UserRegister: UserResponseTC.getResolver("register"),
 });
 
 export const schema = schemaComposer.buildSchema();
