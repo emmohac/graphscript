@@ -1,19 +1,28 @@
 {
   "name": "ts",
+  "author": "UCIgrads",
+  "license": "MIT",
   "version": "1.0.0",
   "description": "Serverless webpack example using Typescript",
-  "main": "handler.ts",
+  "main": "index.ts",
   "scripts": {
     "test": "jest --notify --config=jest.config.js",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "deploy:dev": "sls deploy",
-    "debug:dev": "sls offline"
+    "debug:dev": "sls offline",
+    "build": "tsc",
+    "clean": "rimraf dist",
+    "start": "yarn-run-all clean --parallel watch:build watch:server --print-label",
+    "watch:build": "tsc --watch",
+    "watch:server": "nodemon './build/index.js' --watch './build'"
   },
   "dependencies": {
+    "apollo-server": "^2.19.2",
     "apollo-server-lambda": "^2.19.2",
     "graphql": "^15.4.0",
-    "graphql-compose": "^7.24.2"
+    "graphql-compose": "^7.24.2",
+    "yarn-run-all": "^3.1.1"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.17",
@@ -40,7 +49,5 @@
     "webpack": "^5.18.0",
     "webpack-cli": "^4.4.0",
     "webpack-node-externals": "^2.5.2"
-  },
-  "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
-  "license": "MIT"
+  }
 }

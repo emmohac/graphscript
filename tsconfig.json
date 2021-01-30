@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
+    "rootDir": "src",
+    "outDir": "build",
     "lib": ["esnext"],
     "removeComments": true,
-    "module": "commonjs",
     "moduleResolution": "node",
     "noUnusedLocals": true,
     "strict": true,
@@ -15,16 +15,15 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "sourceMap": true,
-    "target": "esnext",
-    "outDir": "lib"
+    "target": "es2018",
   },
-  "include": ["./**/*.ts"],
+  "include": ["./**/*.ts", "serverless.txt"],
   "exclude": [
     "node_modules/**/*",
     ".serverless/**/*",
     ".webpack/**/*",
     "_warmup/**/*",
     ".vscode/**/*",
-    "__tests__/**/*"
+    "__tests__"
   ]
 }

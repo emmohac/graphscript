@@ -1,29 +1,10 @@
-service: graphscript-lambda
+service: graphscript
 provider:
   name: aws
   runtime: nodejs12.x
   profile: huy
   stage: dev
 
-plugins:
-  - serverless-webpack
-  # - serverless-plugin-typescript
-  - serverless-offline
-custom:
-  webpack:
-    webpackConfig: 'webpack.config.js'
-    includeModules: true
-    packager: 'yarn'
-
 functions:
   graphql:
-    handler: handler.graphqlHandler
-    events:
-    - http:
-        path: graphql
-        method: post
-        cors: true
-    - http:
-        path: graphql
-        method: get
-        cors: true
+    image: <account>.dkr.ecr.<region>.amazonaws.com/<repository>@<digest>
