@@ -4,8 +4,8 @@ import {
   ProjectTC,
   UserExtraTC,
   UserInputTC,
-  UserResponseTC,
-  ErrorTC
+  UserResponseTC
+  // ErrorTC
 } from "../TypeComposes";
 import { projects, applications } from "../Data";
 import { ResolverResolveParams } from "graphql-compose";
@@ -47,7 +47,7 @@ UserResponseTC.addResolver({
     input: UserInputTC
   },
   type: UserResponseTC,
-  resolve: async (rp: ResolverResolveParams<any, object, any>) => {
+  resolve: async (_rp: ResolverResolveParams<any, object, any>) => {
     return {
       isRegistered: true,
       errors: []
@@ -61,7 +61,7 @@ UserResponseTC.addResolver({
     input: UserInputTC
   },
   type: UserResponseTC,
-  resolve: async (rp: ResolverResolveParams<any, object, any>) => {
+  resolve: async (_rp: ResolverResolveParams<any, object, any>) => {
     return {
       isAuthenticated: false,
       errors: [{
