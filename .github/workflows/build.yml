@@ -45,10 +45,8 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
-      - run: yarn
+      - run: yarn --silent
       - run: yarn test
-      - run: echo $(secrets.AWS_ACCESS_KEY_ID)
-      - run: echo $(secrets)
-      - run: ${{ secrets }}
+      - run: echo $(env.AWS_ACCESS_KEY_ID)
         env:
           CI: true
