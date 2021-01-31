@@ -4,8 +4,8 @@ import {
   ProjectTC,
   UserExtraTC,
   UserInputTC,
-  UserResponseTC,
-  ErrorTC
+  UserResponseTC
+  // ErrorTC
 } from "../TypeComposes";
 import { projects, applications } from "../Data";
 import { ResolverResolveParams } from "graphql-compose";
