@@ -1,3 +1,5 @@
+import { ResolverResolveParams } from "graphql-compose";
+import { Document } from "mongoose";
 import {
   ApplicationTC,
   InterestTC,
@@ -5,10 +7,11 @@ import {
   UserExtraTC,
   UserInputTC,
   UserResponseTC,
-  ErrorTC
+  // ErrorTC
 } from "../TypeComposes";
 import { projects, applications } from "../Data";
-import { ResolverResolveParams } from "graphql-compose";
+import { UserModel } from "../Models/User";
+import { IUser } from "../Types";
 
 UserExtraTC.addResolver({
   name: "applications",
@@ -47,7 +50,15 @@ UserResponseTC.addResolver({
     input: UserInputTC
   },
   type: UserResponseTC,
-  resolve: async (_rp: ResolverResolveParams<any, object, any>) => {
+  resolve: async (_rp: ResolverResolveParams<any, any, any>) => {
+    const input = _rp.args.input;
+    console.log(input);
+    // validate using regex too
+    const user = {
+      ...input
+    };
+    const response = await UserModel.create(user);
+    console.log(response);
     return {
       isRegistered: true,
       errors: []
@@ -62,12 +73,28 @@ UserResponseTC.addResolver({
   },
   type: UserResponseTC,
   resolve: async (_rp: ResolverResolveParams<any, object, any>) => {
+    const { username, password } = _rp.args.input;
+    const response = await UserModel.findOne({ username }, {
+      _id: 0,
+      password: 1
+    }) as IUser;
+
+    if (!response) {
+      return {
+        isAuthenticated: false,
+        errors: [{
+          code: "non-existed",
+          message: "User not exists"
+        }]
+      };
+    }
+    
+    // hash and compare?
+    const dbPassword = response.password;
+
     return {
-      isAuthenticated: false,
-      errors: [{
-        code: "non-existed",
-        message: "User not exists"
-      }]
+      isAuthenticated: true,
+      errors: []
     };
   }
 });
