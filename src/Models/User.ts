@@ -14,9 +14,13 @@ const userSchema: mongoose.Schema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    phoneNumber: {
+    password: {
         type: String,
         required: true,
+    },
+    phoneNumber: {
+        type: String,
+        // required: true,
     },
     applications: {
         type: Array
@@ -25,5 +29,7 @@ const userSchema: mongoose.Schema = new mongoose.Schema({
 {
     timestamps: true
 });
+
+userSchema.index({ email: 1});
 
 export const UserModel = mongoose.model("user", userSchema);

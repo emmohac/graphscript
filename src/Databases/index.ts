@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+// optimize this somehow?
 export const mongoConnect = async () => {
     await mongoose.connect(process.env.MONGO_CONNECTION_STRING as string, {
         useUnifiedTopology: true,

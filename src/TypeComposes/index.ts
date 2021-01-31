@@ -61,7 +61,9 @@ export const UserResponseTC = schemaComposer.createObjectTC({
 export const UserInputTC = schemaComposer.createInputTC({
   name: "UserInput",
   fields: {
-    username: "String!",
-    password: "String!"
+    email: "String!",
+    password: "String!",
+    firstName: "String",
+    lastName: "String"
   }
 });
