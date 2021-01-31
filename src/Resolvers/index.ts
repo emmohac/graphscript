@@ -6,7 +6,7 @@ import {
   ProjectTC,
   UserExtraTC,
   UserInputTC,
-  UserResponseTC,
+  UserResponseTC
   // ErrorTC
 } from "../TypeComposes";
 import { projects, applications } from "../Data";
