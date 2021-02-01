@@ -15,10 +15,13 @@
     "apollo-server-lambda": "^2.19.2",
     "graphql": "^15.4.0",
     "graphql-compose": "^7.24.2",
+    "joi": "^17.3.0",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.14"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.17",
+    "@types/jsonwebtoken": "^8.5.0",
     "@types/node": "^14.14.22",
     "@types/serverless": "^1.72.5",
     "@typescript-eslint/eslint-plugin": "^4.14.1",

@@ -1,48 +1,17 @@
 import { ResolverResolveParams } from "graphql-compose";
-import { Document } from "mongoose";
+import Joi from "joi";
+import jwt from "jsonwebtoken";
+import cryptoJS from "crypto";
+
+import { UserInputTC, UserResponseTC } from "../TypeComposes";
 import {
-  ApplicationTC,
-  InterestTC,
-  ProjectTC,
-  UserExtraTC,
-  UserInputTC,
-  UserResponseTC
-  // ErrorTC
-} from "../TypeComposes";
-import { projects, applications } from "../Data";
+  UserNotFoundError,
+  DuplicatedUserError,
+  InvalidFieldError,
+  IncorrectInformation
+} from "../Errors";
 import { UserModel } from "../Models/User";
 import { IUser } from "../Types";
-
-UserExtraTC.addResolver({
-  name: "applications",
-  type: [ApplicationTC],
-  resolve: async (_params: any) => {
-    return applications;
-  }
-});
-
-UserExtraTC.addResolver({
-  name: "interest",
-  type: InterestTC,
-  resolve: async (_params: any) => {
-    // console.log('params from interest');
-    // console.log(params);
-    return {
-      programmingLanguage: "C++;JavaScript;TypeScript;Python;Java",
-      technologies: "Serverless;Unix;Agile/Scrum;Git;GraphQL;REST",
-      food: "Vietnamese food",
-      drink: "Vietnamese coffee"
-    };
-  }
-});
-
-UserExtraTC.addResolver({
-  name: "projects",
-  type: [ProjectTC],
-  resolve: async (_params: any) => {
-    return projects;
-  }
-});
 
 UserResponseTC.addResolver({
   name: "register",
@@ -51,18 +20,39 @@ UserResponseTC.addResolver({
   },
   type: UserResponseTC,
   resolve: async (_rp: ResolverResolveParams<any, any, any>) => {
-    const input = _rp.args.input;
-    console.log(input);
-    // validate using regex too
-    const user = {
-      ...input
-    };
-    const response = await UserModel.create(user);
-    console.log(response);
+    const { input } = _rp.args;
+    const schema = Joi.object({
+      email: Joi.string().email(),
+      password: Joi.string(),
+      firstName: Joi.string(),
+      lastName: Joi.string()
+    })
+      .with("email", "password")
+      .with("firstName", "lastName");
+
+    const valid = schema.validate(input);
+    if (valid.error) {
+      InvalidFieldError.errors[0].message = valid.error.message;
+      return InvalidFieldError;
+    }
+
+    const { email, password } = input;
+    const response = await UserModel.findOne({ email }, { _id: 1 });
+
+    if (response && response._id) {
+      return DuplicatedUserError;
+    }
+
+    const hashedPassword = cryptoJS
+      .createHash("sha256")
+      .update(password)
+      .digest("hex");
+    input.password = hashedPassword;
+    await UserModel.create(input);
     return {
       isRegistered: true,
       errors: []
-    }
+    };
   }
 });
 
@@ -72,31 +62,47 @@ UserResponseTC.addResolver({
     input: UserInputTC
   },
   type: UserResponseTC,
-  resolve: async (_rp: ResolverResolveParams<any, object, any>) => {
-    const { username, password } = _rp.args.input;
-    const response = await UserModel.findOne({ username }, {
-      _id: 0,
-      password: 1
-    }) as IUser;
+  resolve: async (_rp: ResolverResolveParams<any, any, any>) => {
+    const { email, password } = _rp.args.input;
+
+    const response = (await UserModel.findOne(
+      { email },
+      {
+        _id: 0,
+        password: 1,
+        firstName: 1,
+        lastName: 1
+      }
+    )) as IUser;
 
     if (!response) {
-      return {
-        isAuthenticated: false,
-        errors: [{
-          code: "non-existed",
-          message: "User not exists"
-        }]
-      };
+      return UserNotFoundError;
     }
-    
-    // hash and compare?
-    const dbPassword = response.password;
 
+    const { password: userPassword, firstName, lastName } = response;
+    const hashedPassword = cryptoJS
+      .createHash("sha256")
+      .update(password)
+      .digest("hex");
+    if (hashedPassword !== userPassword) {
+      return IncorrectInformation;
+    }
+
+    const user = {
+      email,
+      password: userPassword,
+      firstName,
+      lastName
+    };
+    const token = jwt.sign(user, process.env.SECRET_KEY as string, {
+      expiresIn: 60
+    });
     return {
       isAuthenticated: true,
+      token,
       errors: []
     };
   }
 });
 
-export { UserExtraTC, UserResponseTC };
+export { UserResponseTC };
