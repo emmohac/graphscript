@@ -6,12 +6,21 @@ import { mongoConnect } from "./src/Databases";
 
 const server = new ApolloServer({
   schema,
-  context: async (_event: APIGatewayProxyEvent, _context: Context) => {
+  context: async ({
+    event,
+  }: {
+    event: APIGatewayProxyEvent;
+  }) => {
     await mongoConnect();
+    
+    const authorization = event.headers["authorization"] || null;
     return {
-      name: "Huy"
+      authorization,
     };
-  }
+  },
+  formatError: (error) => {
+    return new Error(`Got error: ${error.message}`);
+  },
 });
 
 export const graphqlHandler = (
