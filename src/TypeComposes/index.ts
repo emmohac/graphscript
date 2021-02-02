@@ -26,6 +26,34 @@ export const UserInputTC = schemaComposer.createInputTC({
     email: "String!",
     password: "String!",
     firstName: "String",
-    lastName: "String"
+    lastName: "String",
+    phoneNumber: "String"
+  }
+});
+
+export const ApplicationTC = schemaComposer.createInputTC({
+  name: "Application",
+  fields: {
+    companyName: "String",
+    applicationDate: "Date"
+  }
+});
+
+export const ApplicationInputTC = schemaComposer.createInputTC({
+  name: "ApplicationInput",
+  fields: {
+    applications: {
+      type: [ApplicationTC]
+    }
+  }
+});
+
+export const ApplicationResponseTC = schemaComposer.createObjectTC({
+  name: "ApplicationResponse",
+  fields: {
+    successful: "Boolean",
+    errors: {
+      type: () => [ErrorTC]
+    }
   }
 });
