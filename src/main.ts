@@ -3,6 +3,7 @@ import { schemaComposer } from "graphql-compose";
 import jwt from "jsonwebtoken";
 
 import { UserResponseTC } from "../src/Resolvers";
+import { ApplicationInputTC } from "../src/TypeComposes";
 
 schemaComposer.Query.addFields({
   UserLogin: UserResponseTC.getResolver("login"),
@@ -28,18 +29,30 @@ schemaComposer.Query.addFields({
       context: any,
       _info: GraphQLResolveInfo
     ) => {
-      if (!context.authorization) {
+      const { authorization }: { authorization: string } = context;
+      if (!authorization) {
         return "Not permitted";
       }
+
       try {
         const result = jwt.verify(
-          context.authorization,
+          authorization.slice(7), // skipping 'Bearer '
           process.env.SECRET_KEY as string
         );
       } catch (error) {
         return `Got error from JTW: ${error}`;
       }
       return "Permitted";
+    }
+  },
+  AddApplication: {
+    type: "String",
+    args: {
+      input: ApplicationInputTC
+    },
+    resolve: async (source: any, args: any, context: any, info: any) => {
+      console.log(args.input);
+      return "Cool";
     }
   }
 });

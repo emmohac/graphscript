@@ -13,9 +13,8 @@ const server = new ApolloServer({
   }) => {
     await mongoConnect();
     
-    const authorization = event.headers["authorization"] || null;
     return {
-      authorization,
+      authorization: event.headers["authorization"],
     };
   },
   formatError: (error) => {

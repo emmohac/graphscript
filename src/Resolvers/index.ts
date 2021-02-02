@@ -3,7 +3,7 @@ import Joi from "joi";
 import jwt from "jsonwebtoken";
 import cryptoJS from "crypto";
 
-import { UserInputTC, UserResponseTC } from "../TypeComposes";
+import { UserInputTC, UserResponseTC, ApplicationInputTC, ApplicationResponseTC } from "../TypeComposes";
 import {
   UserNotFoundError,
   DuplicatedUserError,
@@ -25,7 +25,8 @@ UserResponseTC.addResolver({
       email: Joi.string().email(),
       password: Joi.string(),
       firstName: Joi.string(),
-      lastName: Joi.string()
+      lastName: Joi.string(),
+      phoneNumber: Joi.string()
     })
       .with("email", "password")
       .with("firstName", "lastName");
@@ -92,14 +93,14 @@ UserResponseTC.addResolver({
       email,
       password: userPassword,
       firstName,
-      lastName
+      lastName,
     };
     const token = jwt.sign(user, process.env.SECRET_KEY as string, {
       expiresIn: 60
     });
     return {
       isAuthenticated: true,
-      token,
+      token: `Bearer ${token}`,
       errors: []
     };
   }
