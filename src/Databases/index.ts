@@ -6,7 +6,8 @@ export const mongoConnect = async () => {
     .connect(process.env.MONGO_CONNECTION_STRING as string, {
       useUnifiedTopology: true,
       useNewUrlParser: true,
-      useCreateIndex: true
+      useCreateIndex: true,
+      useFindAndModify: false
     })
     .then(() => {
       console.log(
