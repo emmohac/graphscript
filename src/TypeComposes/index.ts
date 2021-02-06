@@ -48,10 +48,21 @@ export const ApplicationInputTC = schemaComposer.createInputTC({
   }
 });
 
+export const ApplicationItemTC = schemaComposer.createObjectTC({
+  name: "ApplicationItem",
+  fields: {
+    companyName: "String",
+    applicationDate: "Date"
+  }
+});
+
 export const ApplicationResponseTC = schemaComposer.createObjectTC({
   name: "ApplicationResponse",
   fields: {
     successful: "Boolean",
+    items: {
+      type: () => [ApplicationItemTC]
+    },
     errors: {
       type: () => [ErrorTC]
     }

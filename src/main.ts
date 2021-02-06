@@ -4,6 +4,7 @@ import { UserResponseTC, ApplicationResponseTC } from "../src/Resolvers";
 
 schemaComposer.Query.addFields({
   UserLogin: UserResponseTC.getResolver("login"),
+  GetApplication: ApplicationResponseTC.getResolver("get_applications")
 });
 
 schemaComposer.Mutation.addFields({
