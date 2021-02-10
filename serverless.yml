@@ -2,7 +2,7 @@ service: graphscript-lambda
 provider:
   name: aws
   runtime: nodejs12.x
-  profile: huy
+  # profile: huy
   stage: dev
 
 plugins:
