@@ -37,11 +37,17 @@ jobs:
         #   id: yarn-cache-dir-path
         #   run: echo "::set-output name=dir::$(yarn cache dir)"
         # - uses: actions/cache@v2
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          MONGO_CONNECTION_STRING_ATLAS: ${{ secrets.MONGO_CONNECTION_STRING_ATLAS }}
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+        # env:
+        #   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        #   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        #   SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        #   MONGO_CONNECTION_STRING_ATLAS: ${{ secrets.MONGO_CONNECTION_STRING_ATLAS }}
       #   id: yarn-cache
       #   with:
       #     path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
@@ -50,6 +56,8 @@ jobs:
       #       ${{ runner.os }}-yarn-
       - run: yarn
       - run: yarn test
+      - run: export SECRET_KEY=${{ serets.SECRET_KEY }}
+      - run: export MONGO_CONNECTION_STRING_ATLA=${{ secrets.MONGO_CONNECTION_STRING_ATLAS }}
       - run: yarn deploy:dev
         env:
           CI: true
