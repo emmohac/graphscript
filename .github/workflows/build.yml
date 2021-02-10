@@ -56,7 +56,7 @@ jobs:
       #       ${{ runner.os }}-yarn-
       - run: yarn
       - run: yarn test
-      - run: export SECRET_KEY=${{ serets.SECRET_KEY }}
+      - run: export SECRET_KEY=${{ secrets.SECRET_KEY }}
       - run: export MONGO_CONNECTION_STRING_ATLA=${{ secrets.MONGO_CONNECTION_STRING_ATLAS }}
       - run: yarn deploy:dev
         env:
