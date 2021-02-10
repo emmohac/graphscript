@@ -4,6 +4,7 @@ import { Context, APIGatewayProxyEvent, Callback } from "aws-lambda";
 import { schema } from "./src/main";
 import { mongoConnect } from "./src/Databases";
 
+console.log(process.env);
 const server = new ApolloServer({
   schema,
   context: async ({ event }: { event: APIGatewayProxyEvent }) => {
@@ -25,5 +26,6 @@ export const graphqlHandler = (
   context: Context,
   callback: Callback
 ) => {
+  context.callbackWaitsForEmptyEventLoop = false;
   return server.createHandler()(event, context, callback);
 };
