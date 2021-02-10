@@ -13,5 +13,4 @@ schemaComposer.Mutation.addFields({
   RemoveApplication: ApplicationResponseTC.getResolver("remove_application")
 });
 
-
 export const schema = schemaComposer.buildSchema();

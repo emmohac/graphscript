@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 // optimize this somehow?
 export const mongoConnect = async () => {
   await mongoose
-    .connect(process.env.MONGO_CONNECTION_STRING as string, {
+    .connect(process.env.MONGO_CONNECTION_STRING_ATLAS as string, {
       useUnifiedTopology: true,
       useNewUrlParser: true,
       useCreateIndex: true,
@@ -11,7 +11,7 @@ export const mongoConnect = async () => {
     })
     .then(() => {
       console.log(
-        `Database connected at ${process.env.MONGO_CONNECTION_STRING}`
+        `Database connected at ${process.env.MONGO_CONNECTION_STRING_ATLAS}`
       );
     })
     .catch((error) => {

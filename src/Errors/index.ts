@@ -10,9 +10,9 @@ type UserResponse = {
 };
 
 type ApplicationResponse = {
-  successful: boolean
-  errors: ErrorResponse[]
-}
+  successful: boolean;
+  errors: ErrorResponse[];
+};
 
 export const InvalidFieldError: UserResponse = {
   isRegistered: false,
@@ -56,24 +56,30 @@ export const IncorrectInformation: UserResponse = {
 
 export const JwtNotProvided: ApplicationResponse = {
   successful: false,
-  errors: [{
-    code: "jwt-not-provided",
-    message: "Please login to get valid JWT"
-  }]
-}
+  errors: [
+    {
+      code: "jwt-not-provided",
+      message: "Please login to get valid JWT"
+    }
+  ]
+};
 
 export const JwtExpired: ApplicationResponse = {
   successful: false,
-  errors: [{
-    code: "jwt-expired",
-    message: "Jwt has expired"
-  }]
+  errors: [
+    {
+      code: "jwt-expired",
+      message: "Jwt has expired"
+    }
+  ]
 };
 
 export const InvalidToken: ApplicationResponse = {
   successful: false,
-  errors: [{
-    code: "jwt-invalid",
-    message: "Invalid jwt token"
-  }]
+  errors: [
+    {
+      code: "jwt-invalid",
+      message: "Invalid jwt token"
+    }
+  ]
 };

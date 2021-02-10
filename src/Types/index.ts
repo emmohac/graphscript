@@ -10,10 +10,10 @@ export interface IUser extends Document {
 }
 
 export type User = {
-  firstName: string
-  lastName: string
-  email: string
-  password: string
-  phoneNumber?: string
-  applications?: Array<any>
-}
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  phoneNumber?: string;
+  applications?: Array<any>;
+};
