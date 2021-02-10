@@ -4,7 +4,9 @@ import { Context, APIGatewayProxyEvent, Callback } from "aws-lambda";
 import { schema } from "./src/main";
 import { mongoConnect } from "./src/Databases";
 
+console.log("Environment");
 console.log(process.env);
+console.log(process.env.SECRET_KEY);
 const server = new ApolloServer({
   schema,
   context: async ({ event }: { event: APIGatewayProxyEvent }) => {

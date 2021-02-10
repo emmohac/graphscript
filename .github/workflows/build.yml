@@ -57,7 +57,7 @@ jobs:
       - run: yarn
       - run: yarn test
       - run: export SECRET_KEY=${{ secrets.SECRET_KEY }}
-      - run: export MONGO_CONNECTION_STRING_ATLA=${{ secrets.MONGO_CONNECTION_STRING_ATLAS }}
+      - run: export MONGO_CONNECTION_STRING_ATLAS=${{ secrets.MONGO_CONNECTION_STRING_ATLAS }}
       - run: yarn deploy:dev
         env:
           CI: true
