@@ -50,5 +50,6 @@ jobs:
       #       ${{ runner.os }}-yarn-
       - run: yarn
       - run: yarn test
+      - run: yarn deploy:dev
         env:
           CI: true
