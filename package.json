@@ -9,7 +9,7 @@
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "deploy:dev": "sls deploy",
-    "debug:dev": "sls offline"
+    "dev": "sls offline"
   },
   "dependencies": {
     "apollo-server-lambda": "^2.19.2",

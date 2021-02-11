@@ -2,8 +2,11 @@ service: graphscript-lambda
 provider:
   name: aws
   runtime: nodejs12.x
-  profile: huy
+  # profile: huy
   stage: dev
+  environment:
+    SECRET_KEY: ${env:SECRET_KEY}
+    MONGO_CONNECTION_STRING_ATLAS: ${env:MONGO_CONNECTION_STRING_ATLAS}
 
 plugins:
   - serverless-webpack

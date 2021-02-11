@@ -9,6 +9,11 @@ type UserResponse = {
   errors: ErrorResponse[];
 };
 
+type ApplicationResponse = {
+  successful: boolean;
+  errors: ErrorResponse[];
+};
+
 export const InvalidFieldError: UserResponse = {
   isRegistered: false,
   errors: [
@@ -45,6 +50,36 @@ export const IncorrectInformation: UserResponse = {
     {
       code: "incorrect-username-or-password",
       message: "Username or password is incorrect"
+    }
+  ]
+};
+
+export const JwtNotProvided: ApplicationResponse = {
+  successful: false,
+  errors: [
+    {
+      code: "jwt-not-provided",
+      message: "Please login to get valid JWT"
+    }
+  ]
+};
+
+export const JwtExpired: ApplicationResponse = {
+  successful: false,
+  errors: [
+    {
+      code: "jwt-expired",
+      message: "Jwt has expired"
+    }
+  ]
+};
+
+export const InvalidToken: ApplicationResponse = {
+  successful: false,
+  errors: [
+    {
+      code: "jwt-invalid",
+      message: "Invalid jwt token"
     }
   ]
 };
