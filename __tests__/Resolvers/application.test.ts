@@ -85,19 +85,19 @@ describe("ApplicationResponseTC", () => {
       const token = jwt.sign(fakeUser, process.env.SECRET_KEY, {
         expiresIn: 1
       });
+      const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+      await delay(2000);
+      const resolveParams = {
+        context: {
+          authorization: `Bearer ${token}`
+        }
+      };
 
-      setTimeout(async () => {
-        const resolveParams = {
-          context: {
-            authorization: `Bearer ${token}`
-          }
-        };
+      const unitUnderTest = await ApplicationResponseTC.getResolver(
+        "add_application"
+      ).resolve(resolveParams);
 
-        const unitUnderTest = await ApplicationResponseTC.getResolver(
-          "add_application"
-        ).resolve(resolveParams);
-        expect(unitUnderTest).toStrictEqual(JwtExpired);
-      }, 2000);
+      expect(unitUnderTest).toStrictEqual(JwtExpired);
     });
   });
 });

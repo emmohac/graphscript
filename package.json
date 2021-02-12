@@ -2,10 +2,11 @@
   "name": "graphscript",
   "license": "MIT",
   "version": "1.0.0",
+  "private": true,
   "description": "Serverless webpack example using Typescript",
   "main": "handler.ts",
   "scripts": {
-    "test": "jest --notify --verbose --config=jest.config.js",
+    "test": "jest --notify --config=jest.config.js",
     "lint": "eslint . --ext .ts",
     "format": "eslint . --ext .ts --fix",
     "deploy:dev": "sls deploy",
