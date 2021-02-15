@@ -20,12 +20,8 @@ type Response events.APIGatewayProxyResponse
 
 var muxLambda *gorillamux.GorillaMuxAdapter
 
-func getCustomers(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("ok"))
-}
-
-func getCustomersId(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("ok ID"))
+func healthy(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("ok From GO Lambda!"))
 }
 
 func init() {
@@ -33,8 +29,7 @@ func init() {
 
 	Router := mux.NewRouter()
 
-	Router.HandleFunc("/customers", getCustomers).Methods("GET")
-	Router.HandleFunc("/customers/{id}", getCustomersId).Methods("GET")
+	Router.HandleFunc("/healthcheck", healthy).Methods("GET")
 
 	/* headersOK := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type"})
 	originsOK := handlers.AllowedOrigins([]string{"*"})
