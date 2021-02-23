@@ -1,4 +1,4 @@
-# GraphScript
+<div align="center"><h1>GraphScript</h1></div>
 
 
 GraphScript is a personal experimental project intended to provide some feature: register, login, add/remove application, add/remove friends, get friend's applications, logout so that candidate can have a tool to share companies that they have applied to their peers.
@@ -11,7 +11,7 @@ GraphScript is a personal experimental project intended to provide some feature:
 | UnitTest | ![](https://img.shields.io/static/v1?label=&message=Jest&logo=jest&color=white&logoColor=red&style=flat-square)  |
   
 
-# REQUIREMENT
+## REQUIREMENT
 Need to have an AWS account with AWS access key and secret key. [Here](https://www.serverless.com/framework/docs/providers/aws/cli-reference/config-credentials/) is how to configure it.   
 Inside of the graphscript directory, create a .env file
 ```
@@ -19,12 +19,12 @@ Inside of the graphscript directory, create a .env file
 SECRET_KEY=[your_secret_key]
 MONGO_CONNECTION_STRING_ATLAS=[mongodb_uri]
 ```
-# INSTALLATION
+## INSTALLATION
 ```
 yarn
 ```
 
-# CONFIGURATION 
+## CONFIGURATION 
 ### Unit Test
 ```
 yarn test
@@ -38,12 +38,12 @@ yarn format
 yarn dev
 ```
 
-# DEPLOYMENT
+## DEPLOYMENT
 ```
 yarn deploy:dev
 ```
 
-# PROJECT STRUCTURE
+## PROJECT STRUCTURE
 ```
 src
  |__Databases
