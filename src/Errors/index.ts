@@ -14,6 +14,11 @@ type ApplicationResponse = {
   errors: ErrorResponse[];
 };
 
+type FriendResponse = {
+  successful: boolean;
+  errors: ErrorResponse[];
+};
+
 export const InvalidFieldError: UserResponse = {
   isRegistered: false,
   errors: [
@@ -80,6 +85,16 @@ export const InvalidToken: ApplicationResponse = {
     {
       code: "jwt-invalid",
       message: "Invalid jwt token"
+    }
+  ]
+};
+
+export const FriendNotExist: FriendResponse = {
+  successful: false,
+  errors: [
+    {
+      code: "friend-not-exist",
+      message: "Cannot find friend with given email"
     }
   ]
 };

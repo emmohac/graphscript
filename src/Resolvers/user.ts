@@ -2,6 +2,7 @@ import { ResolverResolveParams } from "graphql-compose";
 import Joi from "joi";
 import jwt from "jsonwebtoken";
 import cryptoJS from "crypto";
+import mongoose from "mongoose";
 
 import { UserInputTC, UserResponseTC } from "../TypeComposes";
 import {
@@ -10,7 +11,7 @@ import {
   InvalidFieldError,
   IncorrectInformation
 } from "../Errors";
-import { UserModel } from "../Models/User";
+import { userSchema } from "../Models/User";
 import { IUser } from "../Types";
 
 UserResponseTC.addResolver({
@@ -38,6 +39,8 @@ UserResponseTC.addResolver({
     }
 
     const { email, password } = input;
+    const { conn }: { conn: mongoose.Connection } = _rp.context;
+    const UserModel = conn.model("user", userSchema);
     const response = await UserModel.findOne({ email }, { _id: 1 });
 
     if (response && response._id) {
@@ -50,6 +53,7 @@ UserResponseTC.addResolver({
       .digest("hex");
     input.password = hashedPassword;
     input.applications = [];
+    input.friends = [];
     const result = await UserModel.create(input);
     console.log(result);
     return {
@@ -67,7 +71,8 @@ UserResponseTC.addResolver({
   type: UserResponseTC,
   resolve: async (_rp: ResolverResolveParams<any, any, any>) => {
     const { email, password } = _rp.args.input;
-
+    const { conn }: { conn: mongoose.Connection } = _rp.context;
+    const UserModel = conn.model("user", userSchema);
     const response = (await UserModel.findOne(
       { email },
       {

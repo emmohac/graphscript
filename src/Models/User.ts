@@ -22,6 +22,9 @@ const userSchema: mongoose.Schema = new mongoose.Schema(
     phoneNumber: {
       type: String
     },
+    friends: {
+      type: Array
+    },
     applications: {
       type: Array
     }
@@ -33,4 +36,4 @@ const userSchema: mongoose.Schema = new mongoose.Schema(
 
 userSchema.index({ email: 1 });
 
-export const UserModel = mongoose.model("user", userSchema);
+export { userSchema };

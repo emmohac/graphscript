@@ -1,20 +1,20 @@
 import mongoose from "mongoose";
 
-// optimize this somehow?
-export const mongoConnect = async () => {
-  await mongoose
-    .connect(process.env.MONGO_CONNECTION_STRING_ATLAS as string, {
-      useUnifiedTopology: true,
-      useNewUrlParser: true,
-      useCreateIndex: true,
-      useFindAndModify: false
-    })
-    .then(() => {
-      console.log(
-        `Database connected at ${process.env.MONGO_CONNECTION_STRING_ATLAS}`
-      );
-    })
-    .catch((error) => {
-      console.log(`Failed to connect to database: ${error}`);
-    });
+let conn: mongoose.Connection;
+
+export const getConnection = async (): Promise<mongoose.Connection> => {
+  if (conn == null) {
+    conn = await mongoose.createConnection(
+      process.env.MONGO_CONNECTION_STRING_ATLAS as string,
+      {
+        useCreateIndex: true,
+        useFindAndModify: false,
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        bufferCommands: false,
+        bufferMaxEntries: 0
+      }
+    );
+  }
+  return conn;
 };
