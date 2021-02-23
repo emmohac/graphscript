@@ -1,12 +1,24 @@
 import jwt from "jsonwebtoken";
 import faker from "faker";
+import mongoose from "mongoose";
+import { MongoMemoryServer } from "mongodb-memory-server";
 
 import { ApplicationResponseTC } from "../../src/Resolvers/application";
 import { InvalidToken, JwtExpired, JwtNotProvided } from "../../src/Errors";
-import { UserModel } from "../../src/Models/User";
+import { userSchema } from "../../src/Models/User";
+import { getConnection } from "../../src/Databases";
 
 describe("ApplicationResponseTC", () => {
   describe("add_application", () => {
+    const mongod = new MongoMemoryServer();
+    beforeEach(async () => {
+      const uri = await mongod.getUri();
+      process.env.MONGO_CONNECTION_STRING_ATLAS = uri;
+    });
+    afterEach(async () => {
+      await mongoose.connection.close();
+      await mongod.stop();
+    });
     test("When authorization is not provided, should return JwtNotProvided", async () => {
       const resolveParams = {
         context: {
@@ -36,6 +48,12 @@ describe("ApplicationResponseTC", () => {
     });
 
     test("When authorization is valid and not expired, should return successful", async () => {
+      const conn = await getConnection();
+
+      conn.model(
+        "user",
+        userSchema
+      ).findOneAndUpdate = jest.fn().mockResolvedValueOnce("resolved");
       const fakeUser = {
         email: faker.internet.email(),
         password: faker.internet.password(),
@@ -48,7 +66,8 @@ describe("ApplicationResponseTC", () => {
       });
       const resolveParams = {
         context: {
-          authorization: `Bearer ${token}`
+          authorization: `Bearer ${token}`,
+          conn
         },
         args: {
           input: {
@@ -61,7 +80,6 @@ describe("ApplicationResponseTC", () => {
           }
         }
       };
-      UserModel.findOneAndUpdate = jest.fn().mockResolvedValueOnce("resolved");
 
       const unitUnderTest = await ApplicationResponseTC.getResolver(
         "add_application"
@@ -72,6 +90,7 @@ describe("ApplicationResponseTC", () => {
         errors: []
       });
       jest.clearAllMocks();
+      await conn.close();
     });
 
     test("When authorization is valid but expired, should return JwtExpired", async () => {
@@ -103,6 +122,15 @@ describe("ApplicationResponseTC", () => {
   });
 
   describe("remove_application", () => {
+    const mongod = new MongoMemoryServer();
+    beforeEach(async () => {
+      const uri = await mongod.getUri();
+      process.env.MONGO_CONNECTION_STRING_ATLAS = uri;
+    });
+    afterEach(async () => {
+      await mongoose.connection.close();
+      await mongod.stop();
+    });
     test("When authorization is not provided, should return JwtNotProvided", async () => {
       const resolveParams = {
         context: {
@@ -164,6 +192,11 @@ describe("ApplicationResponseTC", () => {
     });
 
     test("When authorization is valid, should return successful", async () => {
+      const conn = await getConnection();
+      conn.model(
+        "user",
+        userSchema
+      ).findOneAndUpdate = jest.fn().mockResolvedValueOnce("resolved");
       const fakeUser = {
         email: faker.internet.email(),
         password: faker.internet.password(),
@@ -177,7 +210,8 @@ describe("ApplicationResponseTC", () => {
 
       const resolveParams = {
         context: {
-          authorization: `Bearer ${token}`
+          authorization: `Bearer ${token}`,
+          conn
         },
         args: {
           input: {
@@ -186,7 +220,6 @@ describe("ApplicationResponseTC", () => {
         }
       };
 
-      UserModel.findOneAndUpdate = jest.fn().mockResolvedValueOnce("resolved");
       const unitUnderTest = await ApplicationResponseTC.getResolver(
         "remove_application"
       ).resolve(resolveParams);
@@ -196,10 +229,20 @@ describe("ApplicationResponseTC", () => {
         errors: []
       });
       jest.clearAllMocks();
+      await conn.close();
     });
   });
 
   describe("get_application", () => {
+    const mongod = new MongoMemoryServer();
+    beforeEach(async () => {
+      const uri = await mongod.getUri();
+      process.env.MONGO_CONNECTION_STRING_ATLAS = uri;
+    });
+    afterEach(async () => {
+      await mongoose.connection.close();
+      await mongod.stop();
+    });
     test("When authorization is not provided, should return JwtNotProvided", async () => {
       const resolveParams = {
         context: {
@@ -256,6 +299,7 @@ describe("ApplicationResponseTC", () => {
     });
 
     test("When authorization is valid, should return successful", async () => {
+      const conn = await getConnection();
       const fakeApplications = [
         {
           companyName: faker.company.companyName(),
@@ -263,6 +307,9 @@ describe("ApplicationResponseTC", () => {
         }
       ];
 
+      conn.model("user", userSchema).findOne = jest.fn().mockResolvedValueOnce({
+        applications: fakeApplications
+      });
       const fakeUser = {
         email: faker.internet.email(),
         password: faker.internet.password(),
@@ -275,12 +322,10 @@ describe("ApplicationResponseTC", () => {
       });
       const resolveParams = {
         context: {
-          authorization: `Bearer ${token}`
+          authorization: `Bearer ${token}`,
+          conn
         }
       };
-      UserModel.findOne = jest.fn().mockResolvedValueOnce({
-        applications: fakeApplications
-      });
 
       const unitUnderTest = await ApplicationResponseTC.getResolver(
         "get_applications"
@@ -293,6 +338,7 @@ describe("ApplicationResponseTC", () => {
       });
 
       jest.clearAllMocks();
+      await conn.close();
     });
   });
 });

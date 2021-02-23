@@ -1,4 +1,4 @@
-import { Document } from "mongoose";
+import mongoose, { Document } from "mongoose";
 
 export interface IUser extends Document {
   firstName: string;
@@ -6,6 +6,7 @@ export interface IUser extends Document {
   email: string;
   password: string;
   phoneNumber: string;
+  friends: Array<string>;
   applications: Array<any>;
 }
 
@@ -16,4 +17,9 @@ export type User = {
   password: string;
   phoneNumber?: string;
   applications?: Array<any>;
+};
+
+export type Ctx = {
+  conn: mongoose.Connection;
+  authorization: string
 };

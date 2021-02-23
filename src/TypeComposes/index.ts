@@ -68,3 +68,17 @@ export const ApplicationResponseTC = schemaComposer.createObjectTC({
     }
   }
 });
+
+export const FriendResponseTC = schemaComposer.createObjectTC({
+  name: "FriendResponse",
+  fields: {
+    successful: "Boolean",
+    items: "[String]",
+    applications: {
+      type: () => [ApplicationItemTC]
+    },
+    errors: {
+      type: () => [ErrorTC]
+    }
+  }
+});

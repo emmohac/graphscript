@@ -2,17 +2,16 @@ import { ApolloServer } from "apollo-server-lambda";
 import { Context, APIGatewayProxyEvent, Callback } from "aws-lambda";
 
 import { schema } from "./src/main";
-import { mongoConnect } from "./src/Databases";
+import { getConnection } from "./src/Databases";
 
 const server = new ApolloServer({
   schema,
   context: async ({ event }: { event: APIGatewayProxyEvent }) => {
-    await mongoConnect();
     const authorization = event.headers["authorization"];
-
+    const conn = await getConnection();
     return {
-      event,
-      authorization
+      authorization,
+      conn
     };
   },
   formatError: (error) => {
@@ -26,5 +25,10 @@ export const graphqlHandler = (
   callback: Callback
 ) => {
   context.callbackWaitsForEmptyEventLoop = false;
-  return server.createHandler()(event, context, callback);
+  return server.createHandler({
+    cors: {
+      origin: "*",
+      credentials: true
+    }
+  })(event, context, callback);
 };
