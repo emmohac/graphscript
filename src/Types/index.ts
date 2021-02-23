@@ -21,5 +21,5 @@ export type User = {
 
 export type Ctx = {
   conn: mongoose.Connection;
-  authorization: string
+  authorization: string;
 };

@@ -267,8 +267,9 @@ describe("FriendResponseTC", () => {
     });
     test("When authorization and email is valid, should return successful and applications", async () => {
       const conn = await getConnection();
+      const fakeUserEmail = faker.internet.email();
       const fakeUser = {
-        email: faker.internet.email(),
+        email: fakeUserEmail,
         password: faker.internet.password(),
         firstName: faker.name.firstName(),
         lastName: faker.name.lastName()
@@ -277,13 +278,14 @@ describe("FriendResponseTC", () => {
       const token = jwt.sign(fakeUser, process.env.SECRET_KEY, {
         expiresIn: 5
       });
+      const fakeFriendEmail = faker.internet.email();
       const resolveParams = {
         context: {
           authorization: `Bearer ${token}`,
           conn
         },
         args: {
-          email: faker.internet.email()
+          email: fakeFriendEmail 
         }
       };
       const fakeApplications = [
@@ -293,7 +295,8 @@ describe("FriendResponseTC", () => {
         }
       ];
       conn.model("user", userSchema).findOne = jest.fn().mockResolvedValueOnce({
-        applications: fakeApplications
+        applications: fakeApplications,
+        friends: [fakeUserEmail]
       });
 
       const unitUnderTest = await FriendResponseTC.getResolver(
