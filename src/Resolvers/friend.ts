@@ -141,7 +141,7 @@ FriendResponseTC.addResolver({
     }
 
     try {
-      jwt.verify(
+      const { email: userEmail } = jwt.verify(
         authorization.slice(7),
         process.env.SECRET_KEY as string
       ) as User;
@@ -150,12 +150,14 @@ FriendResponseTC.addResolver({
       const UserModel = conn.model("user", userSchema);
       const response = (await UserModel.findOne(
         { email },
-        { _id: 0, applications: 1 }
+        { _id: 0, applications: 1, friends: 1 }
       )) as IUser;
       console.log(response);
       return {
         successful: true,
-        applications: response.applications,
+        applications: response.friends.includes(userEmail)
+          ? response.applications
+          : [],
         errors: []
       };
     } catch (error) {

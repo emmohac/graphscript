@@ -2,7 +2,6 @@ service: graphscript-lambda
 provider:
   name: aws
   runtime: nodejs12.x
-  # profile: huy
   stage: dev
   environment:
     SECRET_KEY: ${env:SECRET_KEY}
