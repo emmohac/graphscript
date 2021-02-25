@@ -14,17 +14,19 @@ import {
 import { userSchema } from "../../src/Models/User";
 
 describe("UserResponseTC", () => {
+  const mongod = new MongoMemoryServer();
+  let conn: mongoose.Connection;
+  beforeAll(async () => {
+    const uri = await mongod.getUri();
+    process.env.MONGO_CONNECTION_STRING_ATLAS = uri;
+    conn = await getConnection();
+  });
+  afterEach(async () => {
+    await mongoose.connection.close();
+    await mongod.stop();
+    await conn.close();
+  });
   describe("register", () => {
-    const mongod = new MongoMemoryServer();
-    beforeEach(async () => {
-      const uri = await mongod.getUri();
-      process.env.MONGO_CONNECTION_STRING_ATLAS = uri;
-    });
-    afterEach(async () => {
-      await mongoose.connection.close();
-      await mongod.stop();
-    });
-
     test("When input fields are not valid, should return InvalidFieldError", async () => {
       const fakeUser = {
         email: faker.internet.exampleEmail(),
@@ -48,7 +50,6 @@ describe("UserResponseTC", () => {
     });
 
     test("When user already registered, should return DuplicatedUserError", async () => {
-      const conn = await getConnection();
       conn.model("user", userSchema).findOne = jest.fn().mockResolvedValueOnce({
         _id: faker.random.uuid()
       });
@@ -74,11 +75,9 @@ describe("UserResponseTC", () => {
 
       expect(unitUnderTest).toStrictEqual(DuplicatedUserError);
       jest.clearAllMocks();
-      await conn.close();
     });
 
     test("When input fields are valid and user have not registered, should return successful", async () => {
-      const conn = await getConnection();
       conn.model("user", userSchema).findOne = jest
         .fn()
         .mockResolvedValueOnce(null);
@@ -111,21 +110,10 @@ describe("UserResponseTC", () => {
         errors: []
       });
       jest.clearAllMocks();
-      await conn.close();
     });
   });
 
   describe("login", () => {
-    const mongod = new MongoMemoryServer();
-    beforeEach(async () => {
-      const uri = await mongod.getUri();
-      process.env.MONGO_CONNECTION_STRING_ATLAS = uri;
-    });
-    afterEach(async () => {
-      await mongoose.connection.close();
-      await mongod.stop();
-    });
-
     test("When user has not registered before, should return UserNotFoundError", async () => {
       const conn = await getConnection();
       conn.model("user", userSchema).findOne = jest
@@ -149,11 +137,9 @@ describe("UserResponseTC", () => {
 
       expect(unitUnderTest).toStrictEqual(UserNotFoundError);
       jest.clearAllMocks();
-      await conn.close();
     });
 
     test("When user provides incorrect password, should return IncorrectInformation", async () => {
-      const conn = await getConnection();
       conn.model("user", userSchema).findOne = jest.fn().mockResolvedValueOnce({
         password: "fakePassword",
         firstName: faker.name.firstName(),
@@ -177,12 +163,10 @@ describe("UserResponseTC", () => {
 
       expect(unitUnderTest).toStrictEqual(IncorrectInformation);
       jest.clearAllMocks();
-      await conn.close();
     });
 
     test("When user provides correct information, should return successful", async () => {
       const fakePassword = faker.internet.password();
-      const conn = await getConnection();
       conn.model("user", userSchema).findOne = jest.fn().mockResolvedValueOnce({
         password: cryptoJS
           .createHash("sha256")
@@ -215,7 +199,6 @@ describe("UserResponseTC", () => {
         errors: []
       });
       jest.clearAllMocks();
-      await conn.close();
     });
   });
 });

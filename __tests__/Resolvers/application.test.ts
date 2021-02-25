@@ -9,16 +9,19 @@ import { userSchema } from "../../src/Models/User";
 import { getConnection } from "../../src/Databases";
 
 describe("ApplicationResponseTC", () => {
+  const mongod = new MongoMemoryServer();
+  let conn: mongoose.Connection;
+  beforeAll(async () => {
+    const uri = await mongod.getUri();
+    process.env.MONGO_CONNECTION_STRING_ATLAS = uri;
+    conn = await getConnection();
+  });
+  afterEach(async () => {
+    await mongoose.connection.close();
+    await mongod.stop();
+    await conn.close();
+  });
   describe("add_application", () => {
-    const mongod = new MongoMemoryServer();
-    beforeEach(async () => {
-      const uri = await mongod.getUri();
-      process.env.MONGO_CONNECTION_STRING_ATLAS = uri;
-    });
-    afterEach(async () => {
-      await mongoose.connection.close();
-      await mongod.stop();
-    });
     test("When authorization is not provided, should return JwtNotProvided", async () => {
       const resolveParams = {
         context: {
@@ -48,8 +51,6 @@ describe("ApplicationResponseTC", () => {
     });
 
     test("When authorization is valid and not expired, should return successful", async () => {
-      const conn = await getConnection();
-
       conn.model(
         "user",
         userSchema
@@ -90,7 +91,6 @@ describe("ApplicationResponseTC", () => {
         errors: []
       });
       jest.clearAllMocks();
-      await conn.close();
     });
 
     test("When authorization is valid but expired, should return JwtExpired", async () => {
@@ -122,15 +122,6 @@ describe("ApplicationResponseTC", () => {
   });
 
   describe("remove_application", () => {
-    const mongod = new MongoMemoryServer();
-    beforeEach(async () => {
-      const uri = await mongod.getUri();
-      process.env.MONGO_CONNECTION_STRING_ATLAS = uri;
-    });
-    afterEach(async () => {
-      await mongoose.connection.close();
-      await mongod.stop();
-    });
     test("When authorization is not provided, should return JwtNotProvided", async () => {
       const resolveParams = {
         context: {
@@ -192,7 +183,6 @@ describe("ApplicationResponseTC", () => {
     });
 
     test("When authorization is valid, should return successful", async () => {
-      const conn = await getConnection();
       conn.model(
         "user",
         userSchema
@@ -229,20 +219,10 @@ describe("ApplicationResponseTC", () => {
         errors: []
       });
       jest.clearAllMocks();
-      await conn.close();
     });
   });
 
   describe("get_application", () => {
-    const mongod = new MongoMemoryServer();
-    beforeEach(async () => {
-      const uri = await mongod.getUri();
-      process.env.MONGO_CONNECTION_STRING_ATLAS = uri;
-    });
-    afterEach(async () => {
-      await mongoose.connection.close();
-      await mongod.stop();
-    });
     test("When authorization is not provided, should return JwtNotProvided", async () => {
       const resolveParams = {
         context: {
@@ -299,7 +279,6 @@ describe("ApplicationResponseTC", () => {
     });
 
     test("When authorization is valid, should return successful", async () => {
-      const conn = await getConnection();
       const fakeApplications = [
         {
           companyName: faker.company.companyName(),
@@ -338,7 +317,6 @@ describe("ApplicationResponseTC", () => {
       });
 
       jest.clearAllMocks();
-      await conn.close();
     });
   });
 });

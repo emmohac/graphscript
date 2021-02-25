@@ -14,16 +14,19 @@ import {
 import { userSchema } from "../../src/Models/User";
 
 describe("FriendResponseTC", () => {
+  const mongod = new MongoMemoryServer();
+  let conn: mongoose.Connection;
+  beforeAll(async () => {
+    const uri = await mongod.getUri();
+    process.env.MONGO_CONNECTION_STRING_ATLAS = uri;
+    conn = await getConnection();
+  });
+  afterEach(async () => {
+    await mongoose.connection.close();
+    await mongod.stop();
+    await conn.close();
+  });
   describe("add_friend", () => {
-    const mongod = new MongoMemoryServer();
-    beforeEach(async () => {
-      const uri = await mongod.getUri();
-      process.env.MONGO_CONNECTION_STRING_ATLAS = uri;
-    });
-    afterEach(async () => {
-      await mongoose.connection.close();
-      await mongod.stop();
-    });
     test("When authorization is not provided, should return JwtNotProvided", async () => {
       const resolveParams = {
         context: {
@@ -80,7 +83,6 @@ describe("FriendResponseTC", () => {
     });
 
     test("When authorization is valid but friend email not exist, should return FriendNotExist", async () => {
-      const conn = await getConnection();
       conn.model("user", userSchema).findOne = jest
         .fn()
         .mockResolvedValueOnce(null);
@@ -109,11 +111,9 @@ describe("FriendResponseTC", () => {
 
       expect(unitUnderTest).toStrictEqual(FriendNotExist);
       jest.clearAllMocks();
-      await conn.close();
     });
 
     test("When authorization and friend email are valid, should return successful", async () => {
-      const conn = await getConnection();
       const fakeUser = {
         email: faker.internet.email(),
         password: faker.internet.password(),
@@ -150,22 +150,11 @@ describe("FriendResponseTC", () => {
         errors: []
       });
       jest.clearAllMocks();
-      await conn.close();
     });
   });
 
   describe("get_friend", () => {
-    const mongod = new MongoMemoryServer();
-    beforeEach(async () => {
-      const uri = await mongod.getUri();
-      process.env.MONGO_CONNECTION_STRING_ATLAS = uri;
-    });
-    afterEach(async () => {
-      await mongoose.connection.close();
-      await mongod.stop();
-    });
     test("When authorization is valid, should return successful and items", async () => {
-      const conn = await getConnection();
       const fakeUser = {
         email: faker.internet.email(),
         password: faker.internet.password(),
@@ -200,22 +189,11 @@ describe("FriendResponseTC", () => {
         errors: []
       });
       jest.clearAllMocks();
-      await conn.close();
     });
   });
 
   describe("remove_friend", () => {
-    const mongod = new MongoMemoryServer();
-    beforeEach(async () => {
-      const uri = await mongod.getUri();
-      process.env.MONGO_CONNECTION_STRING_ATLAS = uri;
-    });
-    afterEach(async () => {
-      await mongoose.connection.close();
-      await mongod.stop();
-    });
     test("When authorization and friend email is valid, should return successful", async () => {
-      const conn = await getConnection();
       const fakeUser = {
         email: faker.internet.email(),
         password: faker.internet.password(),
@@ -251,22 +229,11 @@ describe("FriendResponseTC", () => {
         errors: []
       });
       jest.clearAllMocks();
-      await conn.close();
     });
   });
 
   describe("get_friend_application", () => {
-    const mongod = new MongoMemoryServer();
-    beforeEach(async () => {
-      const uri = await mongod.getUri();
-      process.env.MONGO_CONNECTION_STRING_ATLAS = uri;
-    });
-    afterEach(async () => {
-      await mongoose.connection.close();
-      await mongod.stop();
-    });
     test("When authorization and email is valid, should return successful and applications", async () => {
-      const conn = await getConnection();
       const fakeUserEmail = faker.internet.email();
       const fakeUser = {
         email: fakeUserEmail,
@@ -285,7 +252,7 @@ describe("FriendResponseTC", () => {
           conn
         },
         args: {
-          email: fakeFriendEmail 
+          email: fakeFriendEmail
         }
       };
       const fakeApplications = [
@@ -309,11 +276,10 @@ describe("FriendResponseTC", () => {
         errors: []
       });
       jest.clearAllMocks();
-      await conn.close();
     });
-    
+
     test("When authorization and email is valid but is not friend, should return empty application", async () => {
-      const conn = await getConnection();
+      // const conn = await getConnection();
       const fakeUserEmail = faker.internet.email();
       const fakeUser = {
         email: fakeUserEmail,
@@ -332,7 +298,7 @@ describe("FriendResponseTC", () => {
           conn
         },
         args: {
-          email: fakeFriendEmail 
+          email: fakeFriendEmail
         }
       };
       const fakeApplications = [
@@ -356,7 +322,7 @@ describe("FriendResponseTC", () => {
         errors: []
       });
       jest.clearAllMocks();
-      await conn.close();
-    })
+      // await conn.close();
+    });
   });
 });

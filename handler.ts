@@ -23,7 +23,7 @@ export const graphqlHandler = (
   event: APIGatewayProxyEvent,
   context: Context,
   callback: Callback
-) => {
+): void => {
   context.callbackWaitsForEmptyEventLoop = false;
   return server.createHandler({
     cors: {
