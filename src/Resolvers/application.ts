@@ -1,5 +1,3 @@
-import { ResolverResolveParams } from "graphql-compose";
-import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 
 import { ApplicationInputTC, ApplicationResponseTC } from "../TypeComposes";
@@ -13,8 +11,8 @@ ApplicationResponseTC.addResolver({
     input: ApplicationInputTC
   },
   type: ApplicationResponseTC,
-  resolve: async (rp: ResolverResolveParams<any, Ctx, any>) => {
-    const { authorization } = rp.context;
+  resolve: async ({ args, context }: { args: any; context: Ctx }) => {
+    const { authorization } = context;
     if (!authorization) {
       return JwtNotProvided;
     }
@@ -25,8 +23,8 @@ ApplicationResponseTC.addResolver({
         process.env.SECRET_KEY as string
       ) as User;
       const { email } = result;
-      const inputApplication = rp.args.input.applications;
-      const { conn }: { conn: mongoose.Connection } = rp.context;
+      const inputApplication = args.input.applications;
+      const { conn } = context;
       const UserModel = conn.model("user", userSchema);
       const response = await UserModel.findOneAndUpdate(
         { email },
@@ -51,8 +49,8 @@ ApplicationResponseTC.addResolver({
     input: ApplicationInputTC
   },
   type: ApplicationResponseTC,
-  resolve: async (rp: ResolverResolveParams<any, Ctx, any>) => {
-    const { authorization } = rp.context;
+  resolve: async ({ args, context }: { args: any; context: Ctx }) => {
+    const { authorization } = context;
     if (!authorization) {
       return JwtNotProvided;
     }
@@ -63,8 +61,8 @@ ApplicationResponseTC.addResolver({
         process.env.SECRET_KEY as string
       ) as User;
       const { email } = result;
-      const toRemove = rp.args.input.applications;
-      const { conn }: { conn: mongoose.Connection } = rp.context;
+      const toRemove = args.input.applications;
+      const { conn } = context;
       const UserModel = conn.model("user", userSchema);
       const response = await UserModel.findOneAndUpdate(
         { email },
@@ -86,8 +84,8 @@ ApplicationResponseTC.addResolver({
 ApplicationResponseTC.addResolver({
   name: "get_applications",
   type: ApplicationResponseTC,
-  resolve: async (rp: ResolverResolveParams<any, Ctx, any>) => {
-    const { authorization } = rp.context;
+  resolve: async ({ context }: { context: Ctx }) => {
+    const { authorization } = context;
     if (!authorization) {
       return JwtNotProvided;
     }
@@ -98,7 +96,7 @@ ApplicationResponseTC.addResolver({
         process.env.SECRET_KEY as string
       ) as User;
       const { email } = result;
-      const { conn }: { conn: mongoose.Connection } = rp.context;
+      const { conn } = context;
       const UserModel = conn.model("user", userSchema);
       const response = (await UserModel.findOne(
         { email },

@@ -1,5 +1,3 @@
-import { ResolverResolveParams } from "graphql-compose";
-import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 
 import { FriendResponseTC } from "../TypeComposes";
@@ -18,8 +16,8 @@ FriendResponseTC.addResolver({
   args: {
     email: "String!"
   },
-  resolve: async (rp: ResolverResolveParams<any, Ctx, any>) => {
-    const { authorization }: { authorization: string } = rp.context;
+  resolve: async ({ args, context }: { args: any; context: Ctx }) => {
+    const { authorization } = context;
     if (!authorization) {
       return JwtNotProvided;
     }
@@ -29,8 +27,8 @@ FriendResponseTC.addResolver({
         authorization.slice(7),
         process.env.SECRET_KEY as string
       ) as User;
-      const { email: friendEmail } = rp.args;
-      const { conn }: { conn: mongoose.Connection } = rp.context;
+      const { email: friendEmail } = args;
+      const { conn } = context;
       const UserModel = conn.model("user", userSchema);
       const hasFriend = await UserModel.findOne({ email: friendEmail });
       if (!hasFriend) {
@@ -57,8 +55,8 @@ FriendResponseTC.addResolver({
 FriendResponseTC.addResolver({
   name: "get_friend",
   type: FriendResponseTC,
-  resolve: async (rp: ResolverResolveParams<any, Ctx, any>) => {
-    const { authorization }: { authorization: string } = rp.context;
+  resolve: async ({ context }: { context: Ctx }) => {
+    const { authorization } = context;
     if (!authorization) {
       return JwtNotProvided;
     }
@@ -69,7 +67,7 @@ FriendResponseTC.addResolver({
         process.env.SECRET_KEY as string
       ) as User;
       const { email } = result;
-      const { conn }: { conn: mongoose.Connection } = rp.context;
+      const { conn } = context;
       const UserModel = conn.model("user", userSchema);
       const response = (await UserModel.findOne(
         { email },
@@ -95,8 +93,8 @@ FriendResponseTC.addResolver({
   args: {
     email: "String!"
   },
-  resolve: async (rp: ResolverResolveParams<any, Ctx, any>) => {
-    const { authorization }: { authorization: string } = rp.context;
+  resolve: async ({ args, context }: { args: any; context: Ctx }) => {
+    const { authorization }: { authorization: string } = context;
     if (!authorization) {
       return JwtNotProvided;
     }
@@ -107,8 +105,8 @@ FriendResponseTC.addResolver({
         process.env.SECRET_KEY as string
       ) as User;
       const { email } = result;
-      const toRemove = rp.args.email;
-      const { conn }: { conn: mongoose.Connection } = rp.context;
+      const toRemove = args.email;
+      const { conn } = context;
       const UserModel = conn.model("user", userSchema);
       const response = await UserModel.findOneAndUpdate(
         { email },
@@ -134,8 +132,8 @@ FriendResponseTC.addResolver({
   args: {
     email: "String!"
   },
-  resolve: async (rp: ResolverResolveParams<any, Ctx, any>) => {
-    const { authorization }: { authorization: string } = rp.context;
+  resolve: async ({ args, context }: { args: any; context: Ctx }) => {
+    const { authorization }: { authorization: string } = context;
     if (!authorization) {
       return JwtNotProvided;
     }
@@ -145,8 +143,8 @@ FriendResponseTC.addResolver({
         authorization.slice(7),
         process.env.SECRET_KEY as string
       ) as User;
-      const { email } = rp.args;
-      const { conn }: { conn: mongoose.Connection } = rp.context;
+      const { email } = args;
+      const { conn } = context;
       const UserModel = conn.model("user", userSchema);
       const response = (await UserModel.findOne(
         { email },

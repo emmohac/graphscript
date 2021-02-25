@@ -1,8 +1,6 @@
-import { ResolverResolveParams } from "graphql-compose";
 import Joi from "joi";
 import jwt from "jsonwebtoken";
 import cryptoJS from "crypto";
-import mongoose from "mongoose";
 
 import { UserInputTC, UserResponseTC } from "../TypeComposes";
 import {
@@ -12,7 +10,7 @@ import {
   IncorrectInformation
 } from "../Errors";
 import { userSchema } from "../Models/User";
-import { IUser } from "../Types";
+import { IUser, Ctx } from "../Types";
 
 UserResponseTC.addResolver({
   name: "register",
@@ -20,8 +18,8 @@ UserResponseTC.addResolver({
     input: UserInputTC
   },
   type: UserResponseTC,
-  resolve: async (_rp: ResolverResolveParams<any, any, any>) => {
-    const { input } = _rp.args;
+  resolve: async ({ args, context }: { args: any; context: Ctx }) => {
+    const { input } = args;
     const schema = Joi.object({
       email: Joi.string().email(),
       password: Joi.string(),
@@ -39,7 +37,7 @@ UserResponseTC.addResolver({
     }
 
     const { email, password } = input;
-    const { conn }: { conn: mongoose.Connection } = _rp.context;
+    const { conn } = context;
     const UserModel = conn.model("user", userSchema);
     const response = await UserModel.findOne({ email }, { _id: 1 });
 
@@ -69,9 +67,9 @@ UserResponseTC.addResolver({
     input: UserInputTC
   },
   type: UserResponseTC,
-  resolve: async (_rp: ResolverResolveParams<any, any, any>) => {
-    const { email, password } = _rp.args.input;
-    const { conn }: { conn: mongoose.Connection } = _rp.context;
+  resolve: async ({ args, context }: { args: any; context: Ctx }) => {
+    const { email, password } = args.input;
+    const { conn } = context;
     const UserModel = conn.model("user", userSchema);
     const response = (await UserModel.findOne(
       { email },
