@@ -10,7 +10,13 @@ schemaComposer.Query.addFields({
   UserLogin: UserResponseTC.getResolver("login"),
   GetApplication: ApplicationResponseTC.getResolver("get_applications"),
   GetFriend: FriendResponseTC.getResolver("get_friend"),
-  GetFriendApplication: FriendResponseTC.getResolver("get_friend_application")
+  GetFriendApplication: FriendResponseTC.getResolver("get_friend_application"),
+  Hello: {
+    type: "String",
+    resolve: async (rp) => {
+      return "World";
+    }
+  }
 });
 
 schemaComposer.Mutation.addFields({
