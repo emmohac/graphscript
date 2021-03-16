@@ -10,6 +10,7 @@ import {
   IncorrectInformation
 } from "../Errors";
 import { userSchema } from "../Models/User";
+import { strongPasswordPattern } from "../Helpers";
 import { IUser, Ctx } from "../Types";
 
 UserResponseTC.addResolver({
@@ -22,7 +23,7 @@ UserResponseTC.addResolver({
     const { input } = args;
     const schema = Joi.object({
       email: Joi.string().email(),
-      password: Joi.string(),
+      password: Joi.string().pattern(new RegExp(strongPasswordPattern)),
       firstName: Joi.string(),
       lastName: Joi.string(),
       phoneNumber: Joi.string()

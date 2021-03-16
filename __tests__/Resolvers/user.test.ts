@@ -27,10 +27,11 @@ describe("UserResponseTC", () => {
     await conn.close();
   });
   describe("register", () => {
+    const strongPassword = "Str0ngp4ssword!";
     test("When input fields are not valid, should return InvalidFieldError", async () => {
       const fakeUser = {
         email: faker.internet.exampleEmail(),
-        password: faker.internet.password(),
+        password: strongPassword,
         firstName: faker.name.firstName(),
         phoneNumber: faker.phone.phoneNumberFormat()
       };
@@ -55,7 +56,7 @@ describe("UserResponseTC", () => {
       });
       const fakeUser = {
         email: faker.internet.exampleEmail(),
-        password: faker.internet.password(),
+        password: strongPassword,
         firstName: faker.name.firstName(),
         lastName: faker.name.lastName(),
         phoneNumber: faker.phone.phoneNumberFormat()
@@ -83,7 +84,7 @@ describe("UserResponseTC", () => {
         .mockResolvedValueOnce(null);
       const fakeUser = {
         email: faker.internet.exampleEmail(),
-        password: faker.internet.password(),
+        password: strongPassword,
         firstName: faker.name.firstName(),
         lastName: faker.name.lastName(),
         phoneNumber: faker.phone.phoneNumberFormat()
