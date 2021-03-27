@@ -7,3 +7,4 @@ serverless.yml
 webpack.config.js
 jest.config.js
 README.md
+coverage

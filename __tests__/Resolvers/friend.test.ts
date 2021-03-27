@@ -154,6 +154,32 @@ describe("FriendResponseTC", () => {
   });
 
   describe("get_friend", () => {
+    test("When authorization is not provided, should return JwtNotProvided", async () => {
+      const resolveParams = {
+        context: {
+          authorization: ""
+        }
+      };
+
+      const unitUnderTest = await FriendResponseTC.getResolver(
+        "get_friend"
+      ).resolve(resolveParams);
+      expect(unitUnderTest).toStrictEqual(JwtNotProvided);
+    });
+
+    test("When authorization is invalid, should return InvalidToken", async () => {
+      const resolveParams = {
+        context: {
+          authorization: "invalid"
+        }
+      };
+
+      const unitUnderTest = await FriendResponseTC.getResolver(
+        "get_friend"
+      ).resolve(resolveParams);
+
+      expect(unitUnderTest).toStrictEqual(InvalidToken);
+    });
     test("When authorization is valid, should return successful and items", async () => {
       const fakeUser = {
         email: faker.internet.email(),
@@ -193,6 +219,31 @@ describe("FriendResponseTC", () => {
   });
 
   describe("remove_friend", () => {
+    test("When authorization is not provided, should return JwtNotProvide", async () => {
+      const resolveParams = {
+        context: {
+          authorization: ""
+        }
+      };
+
+      const unitUnderTest = await FriendResponseTC.getResolver(
+        "remove_friend"
+      ).resolve(resolveParams);
+      expect(unitUnderTest).toStrictEqual(JwtNotProvided);
+    });
+
+    test("When authorization is not valid, should return InvalidToken", async () => {
+      const resolveParams = {
+        context: {
+          authorization: "invalid"
+        }
+      };
+
+      const unitUnderTest = await FriendResponseTC.getResolver(
+        "remove_friend"
+      ).resolve(resolveParams);
+      expect(unitUnderTest).toStrictEqual(InvalidToken);
+    });
     test("When authorization and friend email is valid, should return successful", async () => {
       const fakeUser = {
         email: faker.internet.email(),
@@ -233,6 +284,33 @@ describe("FriendResponseTC", () => {
   });
 
   describe("get_friend_application", () => {
+    test("When authorization is not provided, should return JwtNotProvided", async () => {
+      const resolveParams = {
+        context: {
+          authorization: ""
+        }
+      };
+
+      const unitUnderTest = await FriendResponseTC.getResolver(
+        "get_friend_application"
+      ).resolve(resolveParams);
+
+      expect(unitUnderTest).toStrictEqual(JwtNotProvided);
+    });
+
+    test("When authorization is not valid, should return InvalidToken", async () => {
+      const resolveParams = {
+        context: {
+          authorization: "invalid"
+        }
+      };
+
+      const unitUnderTest = await FriendResponseTC.getResolver(
+        "get_friend_application"
+      ).resolve(resolveParams);
+
+      expect(unitUnderTest).toStrictEqual(InvalidToken);
+    });
     test("When authorization and email is valid, should return successful and applications", async () => {
       const fakeUserEmail = faker.internet.email();
       const fakeUser = {
