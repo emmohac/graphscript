@@ -1,30 +1,55 @@
 {
-  "name": "ts",
+  "name": "graphscript",
+  "license": "MIT",
   "version": "1.0.0",
+  "private": true,
   "description": "Serverless webpack example using Typescript",
-  "main": "handler.js",
+  "main": "handler.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --notify --config=jest.config.js",
+    "lint": "eslint . --ext .ts",
+    "format": "eslint . --ext .ts --fix",
+    "deploy:dev": "sls deploy",
+    "dev": "sls offline"
   },
   "dependencies": {
     "apollo-server-lambda": "^2.19.2",
     "graphql": "^15.4.0",
     "graphql-compose": "^7.24.2",
-    "source-map-support": "^0.5.10"
+    "joi": "^17.3.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.11.14"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.17",
-    "@types/node": "^10.12.18",
+    "@types/faker": "^5.1.6",
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/node": "^14.14.22",
     "@types/serverless": "^1.72.5",
+    "@typescript-eslint/eslint-plugin": "^4.14.1",
+    "@typescript-eslint/parser": "^4.14.1",
+    "aws-lambda": "^1.0.6",
+    "dotenv": "^8.2.0",
+    "eslint": "^7.18.0",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "faker": "^5.4.0",
     "fork-ts-checker-webpack-plugin": "^3.0.1",
-    "nodemon": "^2.0.7",
-    "serverless-webpack": "^5.2.0",
-    "ts-loader": "^5.3.3",
-    "ts-node": "^8.10.2",
-    "typescript": "^3.2.4",
-    "webpack": "^4.29.0",
-    "webpack-node-externals": "^1.7.2"
+    "jest": "^26.6.3",
+    "mongodb-memory-server": "^6.9.3",
+    "prettier": "^2.2.1",
+    "serverless": "^2.20.1",
+    "serverless-dotenv-plugin": "^3.1.0",
+    "serverless-offline": "^6.8.0",
+    "serverless-plugin-typescript": "^1.1.9",
+    "serverless-webpack": "^5.3.5",
+    "ts-jest": "^26.4.4",
+    "ts-loader": "^8.0.14",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.3",
+    "webpack": "^5.18.0",
+    "webpack-cli": "^4.4.0",
+    "webpack-node-externals": "^2.5.2"
   },
-  "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
-  "license": "MIT"
+  "author": "HJ"
 }

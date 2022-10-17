@@ -1,0 +1,9 @@
+node_modules
+.serverless
+.webpack
+.vscode
+.github
+serverless.yml
+webpack.config.js
+jest.config.js
+README.md
