@@ -64,4 +64,6 @@ Errors/index contains all the possible errors that can be returned to the client
 Models/User contains the schema of user.  
 TypeCompose/index contains all the type definitions. These are exported to Resolvers.  
 Resolvers/index contains all the logic and database interaction. These modified type definitions are exported to main.  
-main defines the Query and Mutation and how to use which resolver for a specific query or mutation.  
+main defines the Query and Mutation and how to use which resolver for a specific query or mutation.
+
+test
