@@ -21,4 +21,6 @@ schemaComposer.Mutation.addFields({
   RemoveFriend: FriendResponseTC.getResolver("remove_friend")
 });
 
+console.log("sample pr");
+
 export const schema = schemaComposer.buildSchema();
